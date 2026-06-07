@@ -1,0 +1,20 @@
+# Credentials & config
+.env
+config/apis.json
+config/cf_apis.json
+
+# Runtime
+logs/
+*.log
+*.pid
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Session
+*.session
+*.session-journal
+
+# User-specific
+user.md
