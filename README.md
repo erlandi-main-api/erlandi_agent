@@ -22,9 +22,12 @@ Supports any OpenAI-compatible LLM provider (Gemini, Claude, GPT, Llama via Clou
 
 ```
 erlandi_agent/
-├── bot.py              # Main bot
+├── bot.py              # Telegram interface & command handlers
+├── agent.py            # Agent loop (tool-use iteration)
+├── tools.py            # Tool implementations + schema
 ├── soul.md             # AI persona & operational directives
 ├── user.md             # User profile (gitignored)
+├── workspace/          # Agent working directory (files it creates/edits)
 ├── config/
 │   ├── apis.json       # Active providers (gitignored)
 │   └── apis.example.json
@@ -38,6 +41,36 @@ erlandi_agent/
 ├── .env.example
 └── .gitignore
 ```
+
+## Agent Architecture
+
+```
+User message
+     │
+     ▼
+build_messages()  ← system prompt (identity + soul + user + skill)
+     │
+     ▼
+agent.run()  ─── LLM call (with tools)
+     │                │
+     │         tool_calls? ──yes──► execute tool ──► result ──┐
+     │                │                                        │
+     │               no                                        │
+     │                │◄───────────────────────────────────────┘
+     ▼
+final response → Telegram
+```
+
+### Available Tools
+
+| Tool | Description |
+|---|---|
+| `exec_shell` | Execute any shell command on the device |
+| `read_file` | Read file content |
+| `write_file` | Create or overwrite a file |
+| `list_dir` | List directory contents |
+| `web_fetch` | Fetch and extract text from a URL |
+| `python_exec` | Execute Python code |
 
 ---
 
